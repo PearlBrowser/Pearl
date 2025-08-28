@@ -1,26 +1,25 @@
 <?php
-// Get user input
+// lumber-api.xo.je/send.php
+
 $name = $_GET['name'] ?? '';
 $message = $_GET['message'] ?? '';
 $channel = $_GET['channel'] ?? 'general';
 $action = $_GET['action'] ?? 'send';
 
-// Get user's IP
-$user_ip = $_SERVER['REMOTE_ADDR'];
+if (!$name || !$message) {
+    http_response_code(400);
+    echo json_encode(["error"=>"Name and message required"]);
+    exit;
+}
 
-// Get country code from ipapi
-$country = @file_get_contents("https://ipapi.co/$user_ip/country/") ?: 'un';
-
-// Prepare POST data for Lumber
+// Build POST for Lumber
 $postData = http_build_query([
     "name" => $name,
     "message" => $message,
     "channel" => $channel,
-    "action" => $action,
-    "country" => $country
+    "action" => $action
 ]);
 
-// Send to Lumber
 $ch = curl_init("https://lumber.xo.je/");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POST, true);
@@ -29,10 +28,10 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, [
     "Content-Type: application/x-www-form-urlencoded",
     "Accept: */*"
 ]);
+curl_setopt($ch, CURLOPT_COOKIEJAR, "cookies.txt");
+curl_setopt($ch, CURLOPT_COOKIEFILE, "cookies.txt");
 
 $response = curl_exec($ch);
 curl_close($ch);
 
-// Return Lumber response
-header("Content-Type: application/json");
 echo $response;
