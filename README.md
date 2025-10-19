@@ -1,4 +1,4 @@
-# Pearl - the modern lightweight browser
-Pearl is a modern lightweight browser now available for Android! We now support Windows, and Android!
+# Quartz - the modern lightweight browser
+Quartz is a modern lightweight browser, it is available for Windows, macOS and Android support are coming soon.
 
 ## Ready to experience the modern internet, and lightweight browsing? Download now!
